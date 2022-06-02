@@ -1,0 +1,10 @@
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrong-input {
+    border: 3px solid red;
+    border-radius: 3px;
+    padding: 3px;
+}

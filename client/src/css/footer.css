@@ -1,0 +1,9 @@
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.dark-background {
+    background-color: rgb(39, 39, 39);
+    color: white;
+}
