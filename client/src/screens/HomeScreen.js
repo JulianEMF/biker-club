@@ -17,21 +17,39 @@ const HomeScreen = () => {
     const productList = useSelector(state => state.productList);
     const { loading, error, products, page, pages, query } = productList;
   
-    const userLogin = useSelector((state) => state.userLogin);
+    const productsByCategory = useSelector(state => state.productsByCategory);
+    const { loadingCategory, resultsCategory, pageCategory, pagesCategory } = productsByCategory;
+
+    const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
   
     const [results, setResults] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [sortBy, setSortBy] = useState([]);
 
     useEffect(() => {
-        setResults(products);
-        console.log(products);
-      }, [products]);
-    
-      useEffect(()=> {
-          if(keyword) {
+        if (products) {
+            setResults([]);
+            setCurrentPage(page);
+            setTotalPages(pages);
+            return setResults(products);
+        }
+    }, [products]);
+
+    useEffect(() => {
+        if (resultsCategory) {
+            setResults([]);
+            setCurrentPage(pageCategory);
+            setTotalPages(pagesCategory);
+            return setResults(resultsCategory)
+        }
+    }, [resultsCategory])
+ 
+    useEffect(()=> {
+        if (keyword) {
             dispatch(listProducts(keyword, pageNumber));
-          }
+        }
     }, [dispatch, keyword, pageNumber]);
     
       const sortProductsBy = (e) => {
@@ -74,7 +92,8 @@ const HomeScreen = () => {
 
             {loading ? <h2>...Loading...</h2> : error ?( <p>{error}</p>) :
                 <>
-                    {products.length > 0 && (
+                    {/* {products.length > 0 && ( */}
+                   {results.length > 0 && (
                         <div>
                             <form>
                                 <label htmlFor="select">Sort by: </label>
@@ -90,14 +109,14 @@ const HomeScreen = () => {
                         </div>
                     )}
                     <div className="horizontal">
-                        {products.length > 0 ? products.map(product => (
+                        {results.length > 0 ? results.map(product => (
                             <div key={product._id} >
                               <Product product={product} />
                             </div>
                         )) : "Regular stuff"} 
                     </div>
                     <h3>{(query && products.length === 0) && "...No results"}</h3>
-                    <Paginate pages={pages} page={page} keyword={query ? query : ''}/> 
+                    <Paginate pages={totalPages} page={currentPage} keyword={query ? query : ''}/> 
                 </>
             }
         </div>

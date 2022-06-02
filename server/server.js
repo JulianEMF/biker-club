@@ -31,32 +31,27 @@ const store = new MongoDBStore({
 });
 
 // File storage configuration for multer
-const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'images');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now().toString() + '-' + file.originalname)
-    }
-});
+// const fileStorage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'images');
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now().toString() + '-' + file.originalname)
+//     }
+// });
 
 // File filter for multer
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
+// const fileFilter = (req, file, cb) => {
+//     if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+//         cb(null, true);
+//     } else {
+//         cb(null, false);
+//     }
+// };
 
 // Encoding middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-// Image storage middleware
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')); 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/upload', express.static(path.join(__dirname, 'images')));
 
 // Session middleware
 const SECRET = process.env.SESSION_SECRET;
@@ -111,6 +106,13 @@ app.use('/user', userRoutes);
 app.use('/products', productRoutes);
 app.use('/order', orderRoutes);
 app.use('/upload', uploadRoutes);
+
+// Image storage middleware
+// app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')); 
+const dirname = path.resolve();
+// app.use(express.static(path.join(dirname, 'public')));
+// app.use(express.static(path.join(dirname, 'images')));
+app.use('/images', express.static(path.join(dirname, '/images')));
 
 // No page found middleware
 app.use(errorMiddleware.get404);

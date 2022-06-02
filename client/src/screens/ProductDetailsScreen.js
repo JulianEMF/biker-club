@@ -25,11 +25,14 @@ const ProductDetailsScreen = () => {
       navigate(`/cart/${id}?qty=${qty}`);
   };
 
+  console.log(product);
+
   return (
     <div>
       <h1>Product Details</h1>
       {productDetails.product ? (
           <div>
+            <img src={productDetails.product.image} alt={productDetails.product.name} className="image"/>            
             <h2>{productDetails.product.name}</h2>
             <p>{productDetails.product.description}</p>
             <p>{productDetails.product.brand}</p>

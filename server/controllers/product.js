@@ -62,12 +62,27 @@ exports.getProductDetails = asyncHandler(async(req, res, next) => {
 })
 
 // Get products based off a category
-exports.getCategory = asyncHandler(async(req, res, next) => {
+// exports.getProductsByCategory = asyncHandler(async(req, res, next) => {
+//     const category = req.params.category
+//     const results = await Product.find({ category: { $eq: category}});
+//     res.json({ results })
+// });
 
-    const category = req.params.category
-    const results = await Product.find({ category: { $eq: category}});
-    res.json({ results })
-});
+exports.getProductsByCategories = asyncHandler(async(req, res, next) => {
+    const query = req.query.keyword;
+    const pageSize = 3;
+    const page = Number(req.query.pageNumber) || 1;
+    const keyword = req.query.keyword ? {
+        category: {
+            $regex: req.query.keyword,
+            $options: 'i'
+        }
+    } : {}
+
+    const count = await Product.count({ ...keyword });
+    const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1));
+    res.json({ products, page, pages: Math.ceil(count / pageSize), query });
+})
 
 // Get products by search functionality
 exports.getProducts = asyncHandler(async(req, res, next) => {

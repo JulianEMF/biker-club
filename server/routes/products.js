@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProductDetails, getCategory, getProducts, createProductReview, getAllProducts, deleteProduct, createProduct, updateProduct } = require('../controllers/product.js');
+const { getProductDetails, getCategory, getProducts, createProductReview, getAllProducts, deleteProduct, createProduct, updateProduct, getProductsByCategories } = require('../controllers/product.js');
 const { protect, admin } = require('../middleware/authMiddleware.js');
 const router = express.Router();
 
@@ -7,9 +7,11 @@ const router = express.Router();
 // @route GET /products/search
 router.get('/search', getProducts); 
 
+router.get('/category', getProductsByCategories); 
+
 // @desc Get products of a specific category
 // @route GET /products/categories/:category
-router.get('/categories/:category', getCategory);
+// router.get('/categories/:category', getCategory);
 
 router.get('/allproducts', getAllProducts);
 
@@ -23,7 +25,7 @@ router.put('/editproduct/:id', protect, admin, updateProduct);
 
 router.post('/:id/review', protect, createProductReview);
 
-router.delete('/deleteproduct/:id', protect, admin, deleteProduct)
+router.delete('/deleteproduct/:id', protect, admin, deleteProduct);
 
 
 module.exports = router;

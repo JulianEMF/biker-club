@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { listProducts, resetListProducts } from '../actions/productActions';
 import "../css/searchbox.css";
 
-
 const SearchBox = () => {
     const { keyword  } = useParams();
     const { pageNumber } = useParams();

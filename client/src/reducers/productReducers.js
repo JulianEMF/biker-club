@@ -2,6 +2,9 @@ import {
     PRODUCT_LIST_REQUEST, 
     PRODUCT_LIST_SUCCESS, 
     PRODUCT_LIST_FAIL,
+    PRODUCT_BY_CATEGORY_REQUEST,
+    PRODUCT_BY_CATEGORY_SUCCESS,
+    PRODUCT_BY_CATEGORY_FAIL,
     RESET_PRODUCT_LIST_REQUEST,
     PRODUCT_DETAILS_REQUEST, 
     PRODUCT_DETAILS_SUCCESS, 
@@ -45,6 +48,30 @@ export const productListReducer = (state = { products: [] }, action) => {
     }
 }
 
+export const productsByCategoryReducer = (state = { products: [] }, action) => {
+    switch(action.type){
+        case PRODUCT_BY_CATEGORY_REQUEST:
+            return { 
+                loadingCategory: true, 
+                products: [] 
+            }
+        case PRODUCT_BY_CATEGORY_SUCCESS:
+            return { 
+                loadingCategory: false, 
+                resultsCategory: action.payload.products,
+                pagesCategory: action.payload.pages, 
+                pageCategory: action.payload.page 
+            }
+        case PRODUCT_BY_CATEGORY_FAIL:
+            return { 
+                loadingCategory: false, 
+                error: action.payload 
+            }
+        default:
+            return state;
+    }
+}
+
 export const getProductDetailsReducer = (state = { product: { reviews: [] } }, action) => {
     switch(action.type){
         case PRODUCT_DETAILS_REQUEST:
@@ -72,3 +99,4 @@ export const productReviewCreateReducer = (state = { }, action) => {
             return state;
     }
 }
+
